@@ -63,30 +63,31 @@ const Cargar = () => {
     }
   } while (true);
 
-  // Datos pistas:
-  while (true) {
+// Datos pistas:
+while (true) {
     do {
       nombrePista = prompt("Ingresa el nombre de la pista.");
-        if (!nombrePista) {
-          alert("Por favor, ingresa un nombre.");
+      if (!nombrePista) {
+        alert("Por favor, ingresa un nombre.");
       }
     } while (!nombrePista);
-
+  
     do {
-      duracionPista = parseInt(prompt("Ingresa la duración de la pista (en segundos)"));
-        if (!duracionPista) {
-          alert("Por favor, ingresa la duración de la pista (en segundos).");
+      duracionPista = prompt("Ingresa la duración de la pista (en segundos)");
+      duracionPista = parseInt(duracionPista);
+  
+      if (isNaN(duracionPista) || duracionPista <= 0) {
+        alert("Por favor, ingresa un número válido para la duración de la pista.");
       } else if (duracionPista > 7200) {
         alert("La duración de la pista no puede exceder los 7200 segundos.");
       }
     } while (isNaN(duracionPista) || duracionPista <= 0 || duracionPista > 7200);
-
-
+  
     let pistaCargada = new Pista(nombrePista, duracionPista);
     pistas.push(pistaCargada);
-
+  
     duracionTotal += duracionPista;
-
+  
     if (!confirm("¿Quieres ingresar otra pista?")) {
       break;
     }
