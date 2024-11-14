@@ -12,3 +12,150 @@
 html, body {
     height: 100%;
 }
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas: 'hdr' 'mn' 'mn2' 'ftr';
+    background-color: #FBFBFB;
+    color: #333333;
+}
+
+h1, h2, h3, h4, p {
+    line-height: 1.6em;
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+h3, h4, p {
+    padding-left: 2%;
+}
+
+h2 {
+    padding-top: 1.5em;
+}
+
+h3{
+    background-color: #5CAEBF;
+    border-radius: 0.2em;
+    color: white;
+}
+
+a {
+    color: #3B60E4;
+    transition: color 300ms ease-in-out;
+}
+
+a:hover, a:focus {
+    color: #384E77;
+}
+
+#detalles {
+    font-size: 90%;
+}
+
+button {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 22px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    padding: 10px 24px;
+    background-color: #5CAEBF;
+    border: none;
+    border-radius: 6px;
+    transition: opacity 300ms ease-in-out;
+}
+
+button:hover, button:focus {
+    opacity: .6;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+/*-------------------------------------------------- Container */
+hr {
+    margin-bottom: 1rem;
+    border-color: rgba(51, 51, 51, 0.2);
+}
+
+div {
+    padding: 0.5rem 0;
+}
+
+/*-------------------------------------------------- Header */
+header {
+    text-align: center;
+    padding: .5rem 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    background-color: #FBFBFB;
+    grid-area: hdr;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+/*-------------------------------------------------- Main */
+main {
+    padding: 3rem 2rem 0rem;
+    font-size: 1.2em;
+    grid-area: mn;
+    margin: 0 auto;
+}
+
+section {
+    font-size: 1.2em;
+    grid-area: mn2;
+    margin: 0 auto;
+}
+
+/*-------------------------------------------------- Footer */
+footer {
+    background-color: #FBFBFB;
+    padding: 0 1rem;
+    grid-area: ftr;
+}
+
+footer ul {
+    border-top: 1px solid rgba(34, 34, 34, .15);
+    padding: 1rem 0 1.5rem 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+footer li {
+    font-size: .8rem;
+    line-height: 1.6em;
+    color: rgba(51, 51, 51, 0.8);
+    margin-bottom: 0;
+}
+
+/*-------------------------------------------------- Responsive */
+
+@media screen and (min-width: 960px) {
+
+    /** Footer */
+    footer ul {
+        flex-direction: row;
+    }
+
+}
+
+@media screen and (max-width: 650px) {
+
+    /** Main */
+    main {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+}
