@@ -13,15 +13,22 @@
     </header>
 
     <main>
+        <section>
+                <p>
+                    Tuve la idea de crear una página web para cargar/buscar discos. <br>
+                    Cuando el usuario hace click en "Cargar Nuevo Disco", se le pide que ingrese el nombre del disco, el nombre del artista, un código único que le permitirá buscarlo luego, y las pistas dentro del disco. <br> 
+                </p>
+        </section>
         <button onclick="Cargar();">Cargar nuevo disco</button>
         <button onclick="Mostrar();">Mostrar discos</button>
         <button onclick="Buscar()">Buscar disco</button>
     </main>
-    <section>
+    <section id="sectionDiscos">
         <h2>Mis discos</h2>
         <div id="busqueda"></div>
         <div id="info">Aún no se ha ingresado contenido.</div>
     </section>
+
     <footer>
         <ul>
             <li>Lucía Belén Secches</li>
@@ -33,7 +40,7 @@
         </ul>
     </footer>
 
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/scripts.js"></script>
 </body>
 
 </html>

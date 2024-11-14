@@ -1,5 +1,6 @@
 "use strict";
 
+// Discos:
 let discos = [];
 let discoMayorDuracionTotal = 0;
 
@@ -63,7 +64,7 @@ const Cargar = () => {
     }
   } while (true);
 
-// Datos pistas:
+  // Datos pistas:
 while (true) {
     do {
       nombrePista = prompt("Ingresa el nombre de la pista.");

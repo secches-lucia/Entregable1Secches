@@ -61,7 +61,7 @@ button {
     line-height: 22px;
     text-transform: uppercase;
     color: #FFFFFF;
-    padding: 10px 24px;
+    padding: 1em 2em;
     background-color: #5CAEBF;
     border: none;
     border-radius: 6px;
@@ -108,7 +108,7 @@ main {
     margin: 0 auto;
 }
 
-section {
+#sectionDiscos {
     font-size: 1.2em;
     grid-area: mn2;
     margin: 0 auto;
