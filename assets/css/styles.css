@@ -56,8 +56,8 @@ body {
 
     button {
         font-weight: 700;
-        font-size: 14px;
-        line-height: 22px;
+        font-size: 0.9em;
+        line-height: 1.5em;
         text-transform: uppercase;
         color: #FFFFFF;
         padding: 1em 2em;
@@ -105,6 +105,14 @@ main {
     font-size: 1.2em;
     grid-area: mn;
     margin: 0 auto;
+
+    #sectionParrafo {
+        width: 50%;
+        margin: 0 auto;
+        text-align: left;
+        line-height: 2em;
+        padding-bottom: 3em;
+    }
 }
 
 #sectionDiscos {

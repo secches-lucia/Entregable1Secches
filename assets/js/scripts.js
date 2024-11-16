@@ -173,7 +173,7 @@ const Buscar = () => {
   let resultado;
 
   do {
-    busqueda = parseInt(prompt("Introduce el código numérico del disco a buscar."));
+    busqueda = parseInt(prompt("Introducí el código numérico del disco a buscar."));
   } while (isNaN(busqueda));
   resultado = discos.filter(disco => disco.codigo == busqueda);
 
