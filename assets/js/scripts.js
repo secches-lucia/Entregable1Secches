@@ -24,85 +24,84 @@ class Pista {
 let contadorDiscos = 0;
 // Función Cargar:
 const Cargar = () => {
-  let nombreDisco;
-  let autorDisco;
+  let nombreDisco = "";
+  let autorDisco = "";
   let codigoDisco;
   let pistas = [];
-  let nombrePista;
-  let duracionPista;
   let duracionTotal = 0;
 
-  // El nombre del disco, autor/banda y nombre de la pista no pueden quedar vacíos.
-
-  // Datos discos:
-  nombreDisco = prompt("Ingresa el nombre del disco.");
-  if (!nombreDisco) {
-    alert("Por favor ingresar un nombre.");
-    return;
+  // Validar nombre del disco
+  while (!nombreDisco.trim()) {
+    nombreDisco = prompt("Ingresa el nombre del disco.").trim();
+    if (!nombreDisco) {
+      alert("Por favor, ingresa un nombre válido (no solo espacios en blanco).");
+    }
   }
 
-  autorDisco = prompt("Ingresa el nombre del autor o banda del disco.");
-  if (!autorDisco) {
-    alert("Por favor ingresar un autor o banda.");
-    return;
+  // Validar autor/banda
+  while (!autorDisco.trim()) {
+    autorDisco = prompt("Ingresa el nombre del autor o banda del disco.").trim();
+    if (!autorDisco) {
+      alert("Por favor, ingresa un autor o banda válido (no solo espacios en blanco).");
+    }
   }
 
-  do {
+  // Validar código único
+  while (true) {
     codigoDisco = parseInt(prompt("Ingresa el código único del disco (del 1 al 999)."));
-    if (codigoDisco >= 1 && codigoDisco <= 999) {
-      // Si el código ya fue utilizado:
-      if (discos.some(disco => disco.codigo === codigoDisco)) {
-        alert("El código del disco ya fue utilizado.");
+    if (isNaN(codigoDisco) || codigoDisco < 1 || codigoDisco > 999) {
+      alert("Por favor, ingresa un número entre 1 y 999.");
+    } else if (discos.some(disco => disco.codigo === codigoDisco)) {
+      alert("El código del disco ya fue utilizado. Intenta con otro código.");
+    } else {
+      break;
+    }
+  }
+
+  // Validar pistas
+  while (true) {
+    let nombrePista = "";
+    let duracionPista;
+
+    // Validar nombre de la pista
+    while (!nombrePista.trim()) {
+      nombrePista = prompt("Ingresa el nombre de la pista.").trim();
+      if (!nombrePista) {
+        alert("Por favor, ingresa un nombre válido (no solo espacios en blanco).");
+      }
+    }
+
+    // Validar duración de la pista
+    while (true) {
+      duracionPista = parseInt(prompt("Ingresa la duración de la pista (en segundos)."));
+      if (isNaN(duracionPista) || duracionPista <= 0) {
+        alert("Por favor, ingresa un número válido mayor a 0.");
+      } else if (duracionPista > 7200) {
+        alert("La duración de la pista no puede exceder los 7200 segundos.");
       } else {
         break;
       }
-    } else if (codigoDisco === null) {
-      return;
-    } else {
-      // Si el usuario deja el campo vacío.
-      alert("Elija un número entre 1 y 999.");
     }
-  } while (true);
 
-  // Datos pistas:
-while (true) {
-    do {
-      nombrePista = prompt("Ingresa el nombre de la pista.");
-      if (!nombrePista) {
-        alert("Por favor, ingresa un nombre.");
-      }
-    } while (!nombrePista);
-  
-    do {
-      duracionPista = prompt("Ingresa la duración de la pista (en segundos)");
-      duracionPista = parseInt(duracionPista);
-  
-      if (isNaN(duracionPista) || duracionPista <= 0) {
-        alert("Por favor, ingresa un número válido para la duración de la pista.");
-      } else if (duracionPista > 7200) {
-        alert("La duración de la pista no puede exceder los 7200 segundos.");
-      }
-    } while (isNaN(duracionPista) || duracionPista <= 0 || duracionPista > 7200);
-  
+    // Guardar pista
     let pistaCargada = new Pista(nombrePista, duracionPista);
     pistas.push(pistaCargada);
-  
     duracionTotal += duracionPista;
-  
+
     if (!confirm("¿Quieres ingresar otra pista?")) {
       break;
     }
   }
 
+  // Crear disco y agregarlo a la lista
   let discoCargado = new Disco(nombreDisco, autorDisco, codigoDisco, pistas);
   discos.push(discoCargado);
 
-  // Duración mayor total de cada disco:
+  // Actualizar duración mayor total
   if (duracionTotal > discoMayorDuracionTotal) {
     discoMayorDuracionTotal = duracionTotal;
   }
 
-  // Añadimos contador
   contadorDiscos++;
 };
 
