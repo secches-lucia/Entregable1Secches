@@ -4,7 +4,6 @@ let discos = [];
 let discoMayorDuracionTotal = 0;
 let contadorDiscos = 0;
 
-// Clases mejoradas
 class Disco {
   constructor(nombre, autor, codigo) {
     this.nombre = nombre;
@@ -168,14 +167,13 @@ const Mostrar = () => {
 };
 
 
-
 const Buscar = () => {
   let htmlBusqueda = "";
   let busqueda;
   let resultado;
 
   do {
-    busqueda = parseInt(prompt("Introducí el código numérico del disco a buscar."));
+    busqueda = parseInt(prompt("Introduce el código numérico del disco a buscar."));
   } while (isNaN(busqueda));
   resultado = discos.filter(disco => disco.codigo == busqueda);
 
