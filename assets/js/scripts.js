@@ -1,9 +1,6 @@
 "use strict";
 
-let discos = [];
-let discoMayorDuracionTotal = 0;
-let contadorDiscos = 0;
-
+// Clase Disco
 class Disco {
   constructor(nombre, autor, codigo) {
     this.nombre = nombre;
@@ -19,18 +16,9 @@ class Disco {
   obtenerDuracionTotal() {
     return this.pistas.reduce((total, pista) => total + pista.duracion, 0);
   }
-
-  obtenerPromedioDuracion() {
-    return this.obtenerDuracionTotal() / this.pistas.length;
-  }
-
-  obtenerPistaMayorDuracion() {
-    return this.pistas.reduce((mayor, pista) =>
-      !mayor || pista.duracion > mayor.duracion ? pista : mayor
-    );
-  }
 }
 
+// Clase Pista
 class Pista {
   constructor(nombre, duracion) {
     this.nombre = nombre;
@@ -38,160 +26,100 @@ class Pista {
   }
 }
 
-// Función Cargar:
-const Cargar = () => {
-  let nombreDisco = "";
-  let autorDisco = "";
-  let codigoDisco;
+let discos = [];
 
-  // Validar nombre del disco
-  while (!nombreDisco.trim()) {
-    nombreDisco = prompt("Ingresá el nombre del disco (no puede estar vacío):").trim();
-    if (!nombreDisco) {
-      alert("Por favor, ingresá un nombre válido.");
-    }
+// Mostrar formulario
+document.getElementById('mostrarFormularioBtn').addEventListener('click', () => {
+  document.getElementById('formularioCargarDisco').style.display = 'block';
+});
+
+// Agregar pista al formulario
+document.getElementById('agregarPistaBtn').addEventListener('click', () => {
+  const nombrePista = document.getElementById('nombrePista').value.trim();
+  const duracionPista = parseInt(document.getElementById('duracionPista').value);
+
+  if (!nombrePista || isNaN(duracionPista) || duracionPista <= 0 || duracionPista > 7200) {
+    mostrarMensaje('error', 'Datos inválidos para la pista.');
+    return;
   }
 
-  // Validar autor/banda
-  while (!autorDisco.trim()) {
-    autorDisco = prompt("Ingresá el nombre del autor o banda del disco (no puede estar vacío):").trim();
-    if (!autorDisco) {
-      alert("Por favor, ingresá un autor o banda válido.");
-    }
+  const pistaDiv = document.createElement('div');
+  pistaDiv.innerHTML = `<span>${nombrePista} - ${duracionPista} segundos</span>`;
+  pistaDiv.dataset.nombre = nombrePista;
+  pistaDiv.dataset.duracion = duracionPista;
+
+  document.getElementById('listaPistas').appendChild(pistaDiv);
+  document.getElementById('nombrePista').value = '';
+  document.getElementById('duracionPista').value = '';
+});
+
+// Guardar disco
+document.getElementById('formCargarDisco').addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const nombre = document.getElementById('nombreDisco').value.trim();
+  const autor = document.getElementById('autorDisco').value.trim();
+  const codigo = parseInt(document.getElementById('codigoDisco').value);
+
+  if (discos.some(disco => disco.codigo === codigo)) {
+    mostrarMensaje('error', 'El código del disco ya existe.');
+    return;
   }
 
-  // Validar código único con confirmación al cancelar
-  while (true) {
-    let input = prompt("Ingresá el código único del disco (del 1 al 999):");
-    if (input === null) {
-      if (confirm("¿Estás seguro de que deseás cancelar? Perderás los datos ingresados.")) {
-        return;
-      }
-    } else {
-      codigoDisco = parseInt(input);
-      if (isNaN(codigoDisco) || codigoDisco < 1 || codigoDisco > 999) {
-        alert("Por favor, ingresá un número entre 1 y 999.");
-      } else if (discos.some(disco => disco.codigo === codigoDisco)) {
-        alert("El código del disco ya fue utilizado. Intentá con otro código.");
-      } else {
-        break;
-      }
-    }
-  }
+  const nuevoDisco = new Disco(nombre, autor, codigo);
+  const pistas = Array.from(document.querySelectorAll('#listaPistas div'));
+  pistas.forEach(pista => {
+    const nombrePista = pista.dataset.nombre;
+    const duracionPista = parseInt(pista.dataset.duracion);
+    nuevoDisco.agregarPista(new Pista(nombrePista, duracionPista));
+  });
 
-  // Crear disco
-  const disco = new Disco(nombreDisco, autorDisco, codigoDisco);
+  discos.push(nuevoDisco);
+  localStorage.setItem('discos', JSON.stringify(discos));
 
-  // Validar pistas
-  do {
-    let nombrePista = "";
-    let duracionPista;
+  mostrarMensaje('success', 'Disco guardado exitosamente.');
+  Mostrar();
+  event.target.reset();
+  document.getElementById('listaPistas').innerHTML = '';
+});
 
-    // Validar nombre de la pista
-    while (!nombrePista.trim()) {
-      nombrePista = prompt("Ingresá el nombre de la pista (no puede estar vacío):").trim();
-      if (!nombrePista) {
-        alert("Por favor, ingresá un nombre válido.");
-      }
-    }
-
-    // Validar duración de la pista con instrucciones
-    while (true) {
-      duracionPista = parseInt(
-        prompt("Ingresá la duración de la pista en segundos (debe estar entre 1 y 7200):")
-      );
-      if (isNaN(duracionPista) || duracionPista <= 0) {
-        alert("Por favor, ingresá un número válido mayor a 0.");
-      } else if (duracionPista > 7200) {
-        alert("La duración de la pista no puede exceder los 7200 segundos.");
-      } else {
-        break;
-      }
-    }
-
-    // Crear y agregar pista al disco
-    const pista = new Pista(nombrePista, duracionPista);
-    disco.agregarPista(pista);
-  } while (confirm("¿Querés ingresar otra pista?"));
-
-  // Guardar disco
-  discos.push(disco);
-
-  // Actualizar duración mayor total
-  const duracionTotal = disco.obtenerDuracionTotal();
-  if (duracionTotal > discoMayorDuracionTotal) {
-    discoMayorDuracionTotal = duracionTotal;
-  }
-
-  contadorDiscos++;
-};
-
-// Función Mostrar:
+// Mostrar discos
 const Mostrar = () => {
-  let html = "";
-
-  for (let disco of discos) {
+  const info = document.getElementById('info');
+  info.innerHTML = '';
+  discos.forEach(disco => {
     const duracionTotal = disco.obtenerDuracionTotal();
-    const promedioDuracion = disco.obtenerPromedioDuracion();
-    const mayorDuracion = disco.obtenerPistaMayorDuracion();
-
-    html += `
+    const discoDiv = document.createElement('div');
+    discoDiv.innerHTML = `
       <h3>${disco.nombre}</h3>
-      <p><span style="font-weight: bold">Artista/s:</span> ${disco.autor}</p>
-      <div id="detalles">
-        <p><span style="font-weight: bold">Código numérico:</span> ${disco.codigo}</p>
-        <p><span style="font-weight: bold">Cantidad de pistas:</span> ${disco.pistas.length}</p>
-        <p><span style="font-weight: bold">Duración total:</span> ${duracionTotal} segundos</p>
-        <p><span style="font-weight: bold">Promedio de duración:</span> ${promedioDuracion.toFixed(2)} segundos</p>
-        ${
-          mayorDuracion
-            ? `<p><span style="font-weight: bold">Pista con mayor duración:</span> ${mayorDuracion.nombre} (${mayorDuracion.duracion} segundos)</p>`
-            : ""
-        }
-      </div>`;
-
-    for (let pista of disco.pistas) {
-      html += `
-        <h4>${pista.nombre}</h4>
-        <p style="color: ${pista.duracion > 180 ? "red" : "black"}">
-          <span style="font-weight: bold">Duración:</span> ${pista.duracion} segundos.
-        </p>`;
-    }
-  }
-
-  html += `<hr>
-    <p><span style="font-weight: bold">Duración total más alta entre todos los discos ingresados:</span> ${discoMayorDuracionTotal} segundos.</p>
-    <p><span style="font-weight: bold">Ingresó en total:</span> ${contadorDiscos} discos.</p>`;
-
-  document.getElementById("info").innerHTML = html;
+      <p>Autor: ${disco.autor}</p>
+      <p>Código: ${disco.codigo}</p>
+      <p>Duración Total: ${duracionTotal} segundos</p>
+    `;
+    info.appendChild(discoDiv);
+  });
 };
 
+// Mostrar mensaje en pantalla
+const mostrarMensaje = (tipo, mensaje) => {
+  const mensajeDiv = document.createElement('div');
+  mensajeDiv.className = tipo === 'success' ? 'mensaje-exito' : 'mensaje-error';
+  mensajeDiv.textContent = mensaje;
 
-const Buscar = () => {
-  let htmlBusqueda = "";
-  let busqueda;
-  let resultado;
-
-  do {
-    busqueda = parseInt(prompt("Introducí el código numérico del disco a buscar."));
-  } while (isNaN(busqueda));
-  resultado = discos.filter(disco => disco.codigo == busqueda);
-
-  if (resultado.length > 0) {
-    let disco = resultado[0];
-    htmlBusqueda += `<h3>${disco.nombre}</h3>
-            <p><span style="font-weight: bold">Artista/s:</span> ${disco.autor}</p>
-            <p><span style="font-weight: bold">Código numérico:</span> ${disco.codigo}</p>`;
-    for (let pista of disco.pistas) {
-      htmlBusqueda += `<h4>${pista.nombre}</h4>`;
-      if (pista.duracion > 180) {
-        htmlBusqueda += `<p style="color: red"><span style="font-weight: bold">Duración:</span> ${pista.duracion} segundos.</p>`;
-      } else {
-        htmlBusqueda += `<p><span style="font-weight: bold">Duración:</span> ${pista.duracion} segundos.</p>`;
-      }
-    }
-    document.getElementById("busqueda").innerHTML = htmlBusqueda;
-  } else {
-    alert(`No se encontró ningún disco con el código numérico ${busqueda}.`);
-  }
+  document.body.appendChild(mensajeDiv);
+  setTimeout(() => mensajeDiv.remove(), 3000);
 };
+
+// Cargar discos al iniciar
+document.addEventListener('DOMContentLoaded', () => {
+  const discosGuardados = localStorage.getItem('discos');
+  if (discosGuardados) {
+    discos = JSON.parse(discosGuardados).map(discoData => {
+      const disco = new Disco(discoData.nombre, discoData.autor, discoData.codigo);
+      discoData.pistas.forEach(p => disco.agregarPista(new Pista(p.nombre, p.duracion)));
+      return disco;
+    });
+  }
+  Mostrar();
+});
+

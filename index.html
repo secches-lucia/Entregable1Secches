@@ -13,23 +13,41 @@
     </header>
 
     <main>
-        <section>
-                <p id="sectionParrafo">
-                    Tuve la idea de crear una página web para cargar/buscar discos. <br>
-                    Cuando el usuario hace click en "Cargar Nuevo Disco", se le pide que ingrese el nombre del disco, el nombre del artista, un código único que le permitirá buscarlo luego, y las pistas dentro del disco. <br> 
-                    Luego, cuando el usuario hace click en "Mostrar Discos", se le muestran todos los discos que ingresó con toda la información. <br>
-                    Por último, cuando el usuario hace click en "Buscar Disco", se le pide que ingrese el código único del disco que quiere buscar, y se le muestra toda la información de ese disco en particular.
-                </p>
+        <button id="mostrarFormularioBtn">Cargar Disco</button>
+        <div id="formularioCargarDisco" style="display: none;">
+          <h2 class="subtitulo">Cargar Disco</h2>
+          <form id="formCargarDisco">
+            <label for="nombreDisco">Nombre del Disco:</label>
+            <input type="text" id="nombreDisco" required><br>
+    
+            <label for="autorDisco">Autor/Banda:</label>
+            <input type="text" id="autorDisco" required><br>
+    
+            <label for="codigoDisco">Código único:</label>
+            <input type="number" id="codigoDisco" min="1" max="999" required><br>
+    
+            <div>
+              <h2 class="subtitulo">Pistas</h2>
+              <label for="nombrePista">Nombre de la Pista:</label>
+              <input class="inputPistas" type="text" id="nombrePista"><br>
+    
+              <label for="duracionPista">Duración (segundos):</label>
+              <input class="inputPistas" type="number" id="duracionPista" min="1" max="7200"><br>
+    
+              <button type="button" id="agregarPistaBtn">Agregar Pista</button>
+            </div>
+    
+            <div id="listaPistas"></div>
+    
+            <button type="submit">Guardar Disco</button>
+          </form>
+        </div>
+    
+        <section id="sectionDiscos">
+          <h2>Discos Guardados</h2>
+          <div id="info"></div>
         </section>
-        <button onclick="Cargar();">Cargar nuevo disco</button>
-        <button onclick="Mostrar();">Mostrar discos</button>
-        <button onclick="Buscar()">Buscar disco</button>
-    </main>
-    <section id="sectionDiscos">
-        <h2>Mis discos</h2>
-        <div id="busqueda"></div>
-        <div id="info">Aún no se ha ingresado contenido.</div>
-    </section>
+      </main>
 
     <footer>
         <ul>
